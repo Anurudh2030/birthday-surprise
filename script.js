@@ -1459,6 +1459,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Exit Portal (Logout) Handler
+    const btnLogoutPortal = document.getElementById('btn-logout-portal');
+    if (btnLogoutPortal) {
+        btnLogoutPortal.addEventListener('click', () => {
+            playSFX(sfxPop);
+            
+            // Pause music and reset time
+            if (bgMusic) {
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+            }
+            if (musicWidget) {
+                musicWidget.style.display = 'none';
+            }
+            if (musicBars) {
+                musicBars.classList.remove('playing');
+            }
+            
+            // Reset OTP inputs
+            if (otpInputs) {
+                otpInputs.forEach(input => input.value = '');
+            }
+            if (lockErrorMsg) {
+                lockErrorMsg.style.display = 'none';
+            }
+            
+            // Reset Quiz progress
+            currentQuestionIndex = 0;
+            if (quizProgress) {
+                quizProgress.style.width = '0%';
+            }
+            
+            // Reset Cake candles
+            if (flames) {
+                flames.forEach(flame => {
+                    flame.classList.remove('extinguished');
+                    flame.classList.add('active');
+                });
+            }
+            
+            // Hide celebration board and show cake section for next time
+            if (cakeSection) {
+                cakeSection.style.display = 'block';
+            }
+            if (celebrationBoard) {
+                celebrationBoard.classList.add('hidden');
+            }
+            
+            // Hide any open overlays
+            const overlays = document.querySelectorAll('.selfie-overlay, .meme-overlay, .coupon-overlay, .weather-result-overlay, .hero-saver-overlay, .dogs-swarm-overlay, .stamp-overlay');
+            overlays.forEach(overlay => overlay.classList.remove('active'));
+            const customSwarm = document.getElementById('dogsSwarmOverlay');
+            if (customSwarm) {
+                customSwarm.style.display = 'none';
+            }
+            
+            // Go to lock stage
+            showStage('lock');
+            
+            // Focus first OTP box
+            if (otpInputs && otpInputs.length > 0) {
+                setTimeout(() => otpInputs[0].focus(), 500);
+            }
+        });
+    }
+
+
 
 
     // --- HIGH-PERFORMANCE JS CONFETTI SYSTEM ---
