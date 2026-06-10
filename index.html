@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mayukha's Birthday Surprise Adventure! 🎂❤️</title>
+    <!-- Google Fonts for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Floating Background Hearts -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Audio Player (Hidden by default, controlled via UI) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Control Widget (Visible in final stage) -->
+    <div class="music-widget" id="musicWidget">
+        <button id="musicToggle" class="music-btn" aria-label="Toggle Music">
+            <i class="fas fa-music"></i>
+        </button>
+        <div class="music-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         STAGE 0: PASSWORD LOCK SCREEN (Pre-unlock)
+         ============================================== -->
+    <section class="game-stage active" id="stage-lock">
+        <div class="glass-card lock-card">
+            <div class="lock-icon-wrapper">
+                <i class="fas fa-lock pulsing-lock"></i>
+            </div>
+            <h1 class="glow-text" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                    Duolingo Test 
+                    <span class="lock-logo-wrapper"><img src="assets/duolingo-logo.png" alt="Duolingo Logo" class="lock-inline-logo"></span>
+                    ❌
+                </span>
+                <span style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 5px;">
+                    Anurudh Test 
+                    <span class="lock-logo-wrapper"><img src="assets/batman-logo.png" alt="Batman Logo" class="lock-inline-logo"></span>
+                    ✅
+                </span>
+            </h1>
+            <p class="subtitle">Enter the 4-digit secret year to unlock your birthday surprise!</p>
+            
+            <div class="password-box-container">
+                <label class="password-hint"><i class="fas fa-circle-question"></i> HINT: **ഒരു പ്രത്യേക വർഷം (നിനക്ക് അറിയാം 😉)** 📅</label>
+                
+                <div class="otp-container">
+                    <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" autocomplete="off" aria-label="Digit 1">
+                    <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" autocomplete="off" aria-label="Digit 2">
+                    <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" autocomplete="off" aria-label="Digit 3">
+                    <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" autocomplete="off" aria-label="Digit 4">
+                </div>
+                
+                <p id="lock-error-msg" class="error-msg"></p>
+                <button class="btn btn-primary btn-pulse w-100" id="btn-unlock">
+                    Unlock Portal 🔓
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Childhood Photo Overlay -->
+    <div class="childhood-overlay" id="childhoodOverlay">
+        <div class="glass-card childhood-popup-card">
+            <div class="childhood-header">
+                <span class="childhood-badge-pop">🥺 Sweet Memories</span>
+            </div>
+            
+            <h2 class="childhood-title glow-text">നമ്മുടെ കുഞ്ഞു രാജകുമാരി! 👑✨</h2>
+            <p class="childhood-subtitle">Look at this little princess who grew up to rule my heart! ❤️</p>
+
+            <!-- Image display -->
+            <div class="childhood-img-holder">
+                <img src="assets/childhood.jpg" alt="Childhood Memory" class="childhood-img">
+            </div>
+
+            <!-- Caption underneath -->
+            <div class="childhood-caption-box">
+                <p><strong>"cherupathile e cute chinnu ah ente ellam.."</strong></p>
+                <p class="caption-conclusion">Happy Birthday, Mayukha! 🎂❤️</p>
+            </div>
+
+            <button class="btn btn-primary btn-pulse" id="btn-childhood-continue">Start Birthday Quest ➡️</button>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         STAGE 1: TRIVIA QUIZ
+         ============================================== -->
+    <section class="game-stage" id="stage-quiz">
+        <div class="glass-card quiz-card">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="quiz-progress" style="width: 0%;"></div>
+            </div>
+            <div class="quiz-header">
+                <span class="stage-badge">Stage 1: Trivia Quest</span>
+                <span class="question-counter" id="question-counter">Question 1 of 8</span>
+            </div>
+
+            <!-- Question Box -->
+            <div class="question-box" id="question-box">
+                <!-- Dynamically loaded via script.js -->
+            </div>
+
+            <!-- Options Container -->
+            <div class="options-container" id="options-container">
+                <!-- Dynamically loaded via script.js -->
+            </div>
+
+            <!-- Secret Trigger Button -->
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="btn-secret-trigger" class="secret-btn">🚨 DO NOT CLICK</button>
+            </div>
+        </div>
+
+        <!-- Funny Meme Modal / Popup -->
+        <div class="meme-overlay" id="memeOverlay">
+            <div class="glass-card meme-card">
+                <div class="meme-header">
+                    <i class="fas fa-heart-crack crack-icon"></i>
+                    <h2>Ayyee! Nna Pinne Angne! 😂</h2>
+                </div>
+                <!-- Premium Vector/Meme Illustration -->
+                <div class="meme-image-placeholder">
+                    <div class="meme-emoji" id="memeEmoji">🤨</div>
+                    <div class="meme-quote" id="memeQuote">"Enthoru thallal aanu!"</div>
+                </div>
+                <p class="meme-desc" id="memeDesc">Incorrect answer! Try again to impress your boyfriend.</p>
+                <button class="btn btn-secondary" id="btn-try-again">Let Me Try Again 🔄</button>
+            </div>
+        </div>
+
+        <!-- Custom Selfie Evidence Modal -->
+        <div class="selfie-overlay" id="selfieOverlay">
+            <div class="glass-card selfie-popup-card">
+                <div class="selfie-pop-header">
+                    <span class="selfie-badge-pop" id="selfiePopBadge">😳 Selfie മറന്നോ?!</span>
+                </div>
+                
+                <!-- Custom Speech Box -->
+                <div class="officer-bubble-popup w-100" style="margin-bottom: 20px;">
+                    <p id="selfiePopSpeech">"ആദ്യം എടുത്ത selfie തന്നെ മറന്നോ?"</p>
+                    <p id="selfiePopSubSpeech" style="margin-top: 5px; color: var(--accent-pink); font-weight: 600;">"ഇനി Ireland പോയാൽ എന്നെയും മറക്കുമോ നീ? 😂💔"</p>
+                </div>
+
+                <div class="evidence-title">📸 Evidence കാണിക്കട്ടേ...</div>
+
+                <!-- Image display -->
+                <div class="selfie-img-holder">
+                    <img src="assets/first-selfie.png" alt="First Selfie" class="selfie-img">
+                </div>
+
+                <!-- Caption underneath -->
+                <div class="selfie-caption-box">
+                    <p><strong>"Blue shirt-ൽ ഞാനും, Pink dress-ൽ നീയും ❤️"</strong></p>
+                    <p class="caption-conclusion">"Case closed. Memory refresh successful 😌😂"</p>
+                </div>
+
+                <button class="btn btn-primary" id="btn-selfie-continue">Continue Quest ➡️</button>
+            </div>
+        </div>
+
+        <!-- Custom Quiz Feedback Modal (Generic for custom validation questions) -->
+        <div class="selfie-overlay" id="quizOverlay">
+            <div class="glass-card selfie-popup-card" id="quizCard">
+                <div class="selfie-pop-header">
+                    <span class="selfie-badge-pop" id="quizPopBadge">🚨 Feedback 🚨</span>
+                </div>
+                
+                <!-- Custom Speech Box -->
+                <div class="officer-bubble-popup w-100" style="margin-bottom: 25px;">
+                    <p id="quizPopSpeech" style="font-size: 20px; font-weight: 700; color: var(--accent-gold); margin-bottom: 10px;"></p>
+                    <p id="quizPopSubSpeech" style="font-size: 16px; color: var(--text-light);"></p>
+                </div>
+
+                <!-- Hungry Image display (Loaded dynamically for Hunger check) -->
+                <div class="selfie-img-holder" id="hungryImgHolder" style="display: none; height: 180px; width: 180px; margin-bottom: 20px;">
+                    <img src="assets/hungry-chinnu.jpg" alt="Hungry Chinnu" class="selfie-img">
+                </div>
+
+                <button class="btn btn-primary" id="btn-quiz-action" data-action="retry">Continue ➡️</button>
+            </div>
+        </div>
+
+        <!-- Custom Sleep Evidence Modal -->
+        <div class="selfie-overlay" id="sleepOverlay">
+            <div class="glass-card selfie-popup-card" id="sleepCard">
+                <div class="selfie-pop-header">
+                    <span class="selfie-badge-pop" id="sleepPopBadge" style="background: rgba(255, 215, 0, 0.15); border-color: var(--accent-gold); color: var(--accent-gold);">🚨 Evidence Found! 🚨</span>
+                </div>
+                
+                <!-- Custom Speech Box -->
+                <div class="officer-bubble-popup w-100" style="margin-bottom: 15px; padding: 15px;">
+                    <p id="sleepPopSpeech" style="font-size: 15px; line-height: 1.5; color: var(--text-light);"></p>
+                </div>
+
+                <!-- Chat Log Visualization -->
+                <div class="chat-log-box">
+                    <div class="chat-bubble-msg me">"Chinnuu..." ❤️</div>
+                    <div class="chat-bubble-msg chinnu">"Parayeda..." 😊</div>
+                    <div class="chat-bubble-msg me">"Enik oru kaaryam parayan und..."</div>
+                    <div class="chat-bubble-msg chinnu" style="font-size: 18px;">💤💤💤</div>
+                </div>
+
+                <!-- Sleeping Image display -->
+                <div class="selfie-img-holder" style="height: 180px; width: 180px; margin-bottom: 15px;">
+                    <img src="assets/sleeping-chinnu.jpg" alt="Sleeping Chinnu" class="selfie-img">
+                </div>
+
+                <!-- Achievement Badge -->
+                <div class="coupon-dashed-box" style="margin-bottom: 20px; padding: 10px 15px; border-color: var(--accent-gold); background: rgba(255, 215, 0, 0.05);">
+                    <p style="font-size: 14px; font-weight: 700; color: var(--accent-gold); margin: 0;">
+                        🏆 Achievement Unlocked: <br>
+                        <span style="font-family: var(--font-handwritten); font-size: 22px; color: white;">"Fastest Sleeper Alive" 😴😂</span>
+                    </p>
+                </div>
+
+                <!-- Note for boyfriend -->
+                <div class="custom-instructions" style="margin-bottom: 20px; padding: 8px 12px; width: 100%;">
+                    <p class="instructions-text" style="font-size: 11px;"><i class="fas fa-circle-info"></i> <strong>Note for Boyfriend:</strong> You can replace `sleeping-chinnu.png` in the `assets/` folder with her real sleeping photo!</p>
+                </div>
+
+                <button class="btn btn-primary" id="btn-sleep-continue">Continue Quest ➡️</button>
+            </div>
+        </div>
+
+        <!-- Custom Dream Question Modal -->
+        <div class="selfie-overlay" id="dreamOverlay">
+            <div class="glass-card selfie-popup-card" id="dreamCard">
+                <!-- Step 1: Initial Reveal Card Content -->
+                <div id="dreamStep1">
+                    <div class="selfie-pop-header">
+                        <span class="selfie-badge-pop" style="background: rgba(32, 191, 107, 0.15); border-color: #20bf6b; color: #20bf6b;">🎉 Correct Answer Detected!</span>
+                    </div>
+                    
+                    <div class="officer-bubble-popup w-100" style="margin-bottom: 20px;">
+                        <p style="font-size: 18px; font-weight: 700; color: var(--accent-gold); margin-bottom: 5px;">"System analysis complete 🤖❤️"</p>
+                        <p style="font-size: 14px; color: var(--text-light);">"Hidden dream successfully identified 😌"</p>
+                    </div>
+
+                    <!-- Image Display -->
+                    <div class="selfie-img-holder" style="height: 190px; width: 190px; margin-bottom: 15px;">
+                        <img src="assets/couple-dream.png" alt="Chinnu's Big Dream" class="selfie-img">
+                    </div>
+
+                    <!-- Captions list -->
+                    <div class="selfie-caption-box" style="margin-bottom: 20px; font-size: 14px; line-height: 1.5;">
+                        <p>💼 Job ✅</p>
+                        <p>📱 iPhone ✅</p>
+                        <p>💰 Money ✅</p>
+                        <p style="margin-top: 10px; font-weight: 500; color: var(--text-muted);">Pakshe ettavum important...</p>
+                        <p style="font-size: 16px; font-weight: 700; color: var(--accent-pink); margin-top: 5px;">Anurudh Abroad Package ❤️✈️😂</p>
+                    </div>
+
+                    <button class="btn btn-primary" id="btn-dream-reveal-troll">Verify Dream details 📋</button>
+                </div>
+
+                <!-- Step 2: Processing & Troll Result Content (Hidden Initially) -->
+                <div id="dreamStep2" style="display: none; width: 100%;">
+                    <div class="selfie-pop-header">
+                        <span class="selfie-badge-pop" style="background: rgba(255, 215, 0, 0.15); border-color: var(--accent-gold); color: var(--accent-gold);">🔍 Verifying Dream...</span>
+                    </div>
+
+                    <!-- Terminal/Processing Log screen style -->
+                    <div class="chat-log-box" id="dreamProcessingLog" style="font-family: monospace; min-height: 130px; font-size: 13.5px; line-height: 1.6; color: #26de81; padding: 20px; text-align: left;">
+                        <!-- Dynamically filled with logs -->
+                    </div>
+
+                    <!-- Verified output card (Hidden initially, shown after logs complete) -->
+                    <div class="coupon-dashed-box" id="dreamTrollResult" style="display: none; margin-bottom: 25px; padding: 15px; border-color: var(--accent-pink); background: rgba(255, 75, 114, 0.05); text-align: left;">
+                        <p style="font-size: 15px; font-weight: 700; color: var(--accent-pink); margin-bottom: 8px;">✅ Result Verified</p>
+                        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 10px;">Dream Found:</p>
+                        <ul style="list-style: none; padding-left: 0; font-size: 14.5px; line-height: 1.6; color: var(--text-light);">
+                            <li>🙋‍♂️ 1 Boyfriend</li>
+                            <li>🧳 2 Luggage Bags</li>
+                            <li>✈️ 1 One-Way Ticket to Ireland 😂❤️✈️</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" id="btn-dream-continue" style="display: none;">Continue Quest ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bonus Hidden Secret Modal -->
+        <div class="selfie-overlay" id="secretOverlay">
+            <div class="glass-card selfie-popup-card" id="secretCard" style="max-width: 480px;">
+                <!-- Step 1: Question and Options -->
+                <div id="secretStep1" style="width: 100%;">
+                    <div class="selfie-pop-header">
+                        <span class="selfie-badge-pop" style="background: rgba(235, 77, 75, 0.15); border-color: #eb4d4b; color: #eb4d4b;">😈 Bonus Secret Question</span>
+                    </div>
+                    
+                    <h2 class="glow-text" style="font-size: 21px; margin-top: 15px; margin-bottom: 25px;">"Will you take Anurudh to Ireland?" 🇮🇪✈️</h2>
+                    
+                    <div class="options-container" id="secret-options-container" style="min-height: 220px; position: relative; gap: 12px; display: flex; flex-direction: column;">
+                        <button class="option-btn" id="secret-btn-obviously" style="border-color: #20bf6b; background: rgba(32, 191, 107, 0.05); text-align: center;">✅ Obviously ❤️</button>
+                        <button class="option-btn" data-dodge="true" data-hover-text="Wait... what? 🧐" data-original-text="❌ No" style="text-align: center;">❌ No</button>
+                        <button class="option-btn" data-dodge="true" data-hover-text="Really? 🤭" data-original-text="❌ Maybe" style="text-align: center;">❌ Maybe</button>
+                        <button class="option-btn" data-dodge="true" data-hover-text="Think again! 😜" data-original-text="❌ Let's See" style="text-align: center;">❌ Let's See</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Success Reveal Content -->
+                <div id="secretStep2" style="display: none; width: 100%; text-align: center;">
+                    <div class="selfie-pop-header" style="margin-bottom: 15px;">
+                        <span class="selfie-badge-pop" style="background: rgba(32, 191, 107, 0.15); border-color: #20bf6b; color: #20bf6b;">🎉 Agreement Locked!</span>
+                    </div>
+                    <div class="officer-bubble-popup w-100" style="margin-bottom: 20px;">
+                        <p style="font-size: 18px; font-weight: 700; color: var(--accent-gold); margin-bottom: 5px;">"Decision Registered! ✈️💼"</p>
+                        <p style="font-size: 14px; color: var(--text-light);">"Luggage space allocation confirmed for Anurudh! 😂🎒"</p>
+                    </div>
+                    <div class="coupon-dashed-box" style="margin-bottom: 25px; padding: 15px; border-color: var(--accent-pink); background: rgba(255, 75, 114, 0.05);">
+                        <p style="font-size: 15px; font-weight: 700; color: var(--accent-pink);">Verified Suitcase Pack List:</p>
+                        <p style="font-size: 13.5px; color: var(--text-light); margin-top: 5px;">"1 One-Way Ticket to Dublin added to luggage! ✈️🇮🇪❤️"</p>
+                    </div>
+                    <button class="btn btn-primary" id="btn-secret-close">Close 🔒</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 2: IMMIGRATION OFFICER GAME (Ireland Airport)
+         ============================================= -->
+    <section class="game-stage" id="stage-immigration">
+        <div class="glass-card immigration-card">
+            <span class="stage-badge">Stage 2: Airport Customs</span>
+            <h2 class="glow-text">Ireland Airport Booth 🇮🇪🛫</h2>
+            
+            <div class="officer-wrapper">
+                <div class="customs-badge">
+                    <i class="fas fa-passport"></i>
+                    <span>IMMIGRATION</span>
+                </div>
+                <div class="chat-bubble left border-customs">
+                    <strong class="officer-title"><i class="fas fa-user-tie"></i> Officer:</strong>
+                    <p class="officer-speech">"Welcome to Ireland Airport, Mayukha! Please state the purpose of your visit."</p>
+                </div>
+            </div>
+
+            <div class="immigration-options">
+                <button class="btn option-btn w-100 customs-choice" data-choice="Study">
+                    Higher Studies / Education 📚
+                </button>
+                <button class="btn option-btn w-100 customs-choice" data-choice="Adventure">
+                    Adventure & Travel ✈️
+                </button>
+                <button class="btn option-btn w-100 customs-choice" data-choice="Escape">
+                    Escape my boyfriend! 😂
+                </button>
+            </div>
+        </div>
+
+        <!-- Customs Stamp Overlay -->
+        <div class="stamp-overlay border-stamp" id="customsStampOverlay">
+            <div class="stamp-wrapper">
+                <div class="customs-stamp">
+                    <span class="stamp-title">APPROVED</span>
+                    <span class="stamp-sub">IRELAND IMMIGRATION</span>
+                    <span class="stamp-date">JUNE 2026</span>
+                </div>
+                <div class="officer-bubble-popup">
+                    <i class="fas fa-quote-left"></i>
+                    <p id="officer-popup-text">"Application approved, but boyfriend misses you already ❤️"</p>
+                </div>
+                <button class="btn btn-primary btn-pulse" id="btn-customs-continue">Enter Ireland 🍀</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 3: "SAVE ME FROM DOGS" SIMULATOR (Inside Joke)
+         ============================================= -->
+    <section class="game-stage" id="stage-dogs">
+        <div class="glass-card dog-card">
+            <span class="stage-badge">Stage 3: Danger Zone</span>
+            <h2 class="glow-text">Dog attack! 🚨😱</h2>
+            <p class="subtitle">Oh no, Mayukha! A pack of wild street dogs are blocking your way!</p>
+            
+            <div class="emergency-wrapper">
+                <div class="emergency-alert">
+                    <i class="fas fa-triangle-exclamation"></i> Danger Level: Critical
+                </div>
+                <!-- Massive Glowing Button -->
+                <button class="btn btn-danger btn-pulse btn-emergency" id="btn-save-dogs">
+                    <i class="fas fa-shield-halved"></i> SAVE ME, BOYFRIEND! 🚨
+                </button>
+            </div>
+        </div>
+
+        <!-- Dogs Barking Overlay -->
+        <div class="dogs-swarm-overlay" id="dogsSwarmOverlay">
+            <!-- Dynamically spawned dog emoji pack -->
+            <div class="swarm-content">
+                <h1 class="bark-text animate-pulse">WOOF! BARK! 🐶🐶</h1>
+                <p>Dogs are chasing you!</p>
+            </div>
+        </div>
+
+        <!-- Boyfriend Superhero Saver Overlay -->
+        <div class="hero-saver-overlay" id="heroSaverOverlay">
+            <div class="glass-card hero-card">
+                <div class="hero-shield-icon"><i class="fas fa-shield-heart"></i></div>
+                <h2 class="hero-title glow-text">Boyfriend to the Rescue! 🦸‍♂️💥</h2>
+                
+                <!-- Superhero Boyfriend Chibi Graphic -->
+                <div class="hero-img-container">
+                    <img src="assets/superhero-bf.jpg" alt="Superhero Boyfriend" class="hero-photo-placeholder">
+                </div>
+
+                <div class="hero-bubble">
+                    <p>"Don't worry, Mayukha! I will always protect you from the dogs! ❤️"</p>
+                </div>
+                
+                <button class="btn btn-primary" id="btn-dogs-continue">My Superhero! 🥰 Next ➡️</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 4: IRELAND WEATHER FORECASTER (Funny widget)
+         ============================================= -->
+    <section class="game-stage" id="stage-weather">
+        <div class="glass-card weather-card">
+            <span class="stage-badge">Stage 4: Climate Check</span>
+            <h2 class="glow-text">Ireland Weather Predictor 🌧️🍀</h2>
+            <p class="subtitle">Find out how the weather is in Ireland today.</p>
+            
+            <div class="weather-widget-container">
+                <!-- Weather Screen display -->
+                <div class="weather-display" id="weatherDisplay">
+                    <i class="fas fa-cloud-sun weather-icon"></i>
+                    <p class="weather-status">Status: Unknown</p>
+                </div>
+
+                <button class="btn btn-primary" id="btn-check-weather">
+                    Check Ireland Weather 🇮🇪
+                </button>
+            </div>
+        </div>
+
+        <!-- Rain Response Overlay -->
+        <div class="weather-result-overlay" id="weatherResultOverlay">
+            <div class="glass-card weather-popup-card">
+                <div class="weather-header-pop text-danger">
+                    <i class="fas fa-cloud-showers-heavy rain-icon"></i>
+                    <h2>Status: Rain 🌧️</h2>
+                </div>
+                <div class="weather-desc-box">
+                    <p class="weather-quote">"Don't worry, Mayukha! I'm sending sunshine all the way from Kerala! ☀️🌴❤️"</p>
+                </div>
+                <button class="btn btn-primary" id="btn-weather-continue">Claim Warmth & Next ➡️</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 5: SPIN THE WHEEL
+         ============================================== -->
+    <section class="game-stage" id="stage-wheel">
+        <div class="glass-card wheel-card">
+            <span class="stage-badge">Stage 5: Fortune Wheel</span>
+            <h2 class="glow-text">Spin the Love Wheel! 🎰💖</h2>
+            <p class="subtitle">Spin to win a random romantic coupon card from your boyfriend!</p>
+            
+            <!-- Spinning Wheel Frame -->
+            <div class="wheel-outer-wrapper">
+                <div class="wheel-pointer"><i class="fas fa-caret-down"></i></div>
+                <div class="wheel-inner-container">
+                    <canvas id="wheel-canvas" width="360" height="360"></canvas>
+                </div>
+                <button id="btn-spin" class="spin-center-btn">SPIN</button>
+            </div>
+        </div>
+
+        <!-- Reward Coupon Modal -->
+        <div class="coupon-overlay" id="couponOverlay">
+            <div class="glass-card coupon-popup-card">
+                <div class="coupon-seal">
+                    <i class="fas fa-certificate"></i>
+                    <span>CLAIMED</span>
+                </div>
+                <span class="coupon-badge">OFFICIAL COUPON</span>
+                <h2 class="coupon-gift-title" id="couponGiftTitle">Surprise Gift! 🎁</h2>
+                <div class="coupon-dashed-box">
+                    <p class="coupon-desc">This voucher entitles Mayukha to one premium reward from her boyfriend, redeemable anytime!</p>
+                    <div class="coupon-code">CODE: **LOV-MAYUKHA-2026**</div>
+                </div>
+                <p class="coupon-disclaimer">Valid forever. Strictly non-transferable.</p>
+                <button class="btn btn-primary" id="btn-coupon-accept">Claim Coupon & Next ➡️</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 6: THE ESCAPING "NO" CONTRACT
+         ============================================== -->
+    <section class="game-stage" id="stage-contract">
+        <div class="glass-card contract-card">
+            <span class="stage-badge">Stage 6: Official Agreement</span>
+            <h2 class="glow-text title-contract">The Sweetheart Treaty 📜</h2>
+            
+            <div class="contract-text-box">
+                <p>I, <strong>Mayukha</strong>, also known as the official Queen of this relationship, hereby agree to the following terms and conditions on my birthday and forever after:</p>
+                <ul>
+                    <li><i class="fas fa-heart"></i> I will love my boyfriend unconditionally, even when he plays games or falls asleep early.</li>
+                    <li><i class="fas fa-heart"></i> I will cook/order Biryani for him whenever he looks cute (which is always).</li>
+                    <li><i class="fas fa-heart"></i> I agree that he is the most caring, sweetest, and handsomest boy in the universe.</li>
+                    <li><i class="fas fa-heart"></i> I will not pinch him or make grumpy faces when I am hungry.</li>
+                </ul>
+                <p class="signature-date">Signed with love & cupcakes on this day.</p>
+            </div>
+
+            <div class="contract-question">
+                <h3>Do you agree to all these terms, Mayukha? 🥰</h3>
+            </div>
+
+            <div class="btn-group-contract">
+                <button class="btn btn-primary" id="btn-contract-yes">YES, I AGREE! 💍</button>
+                <button class="btn btn-danger" id="btn-contract-no">NO 😤</button>
+            </div>
+        </div>
+        
+        <!-- Stamp Popup after YES -->
+        <div class="stamp-overlay" id="stampOverlay">
+            <div class="stamp-wrapper">
+                <div class="stamp-circle">
+                    <span>APPROVED</span>
+                    <span class="stamp-name">MAYUKHA</span>
+                </div>
+                <p class="stamp-message">Contract legally locked in my heart! ❤️</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         STAGE 7: THE GRAND BIRTHDAY SURPRISE
+         ============================================== -->
+    <section class="game-stage" id="stage-reveal">
+        <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+
+        <div class="reveal-container">
+            <!-- Stage 7A: Interactive Candle Blow -->
+            <div class="cake-wrapper" id="cakeSection">
+                <h1 class="cursive-title animate-pulse">Make a Wish, Mayukha... 🤫</h1>
+                <p class="cake-instruction">Click the cake to blow out the candles!</p>
+                
+                <!-- Interactive SVG Birthday Cake -->
+                <div class="cake-container" id="interactiveCake">
+                    <div class="plate"></div>
+                    <div class="cake-body">
+                        <div class="layer layer-bottom"></div>
+                        <div class="layer layer-middle"></div>
+                        <div class="layer layer-top"></div>
+                        <div class="icing"></div>
+                        <div class="drips">
+                            <div class="drip"></div>
+                            <div class="drip"></div>
+                            <div class="drip"></div>
+                        </div>
+                    </div>
+                    <!-- Candles -->
+                    <div class="candles">
+                        <div class="candle c1">
+                            <div class="wick"></div>
+                            <div class="flame active"></div>
+                        </div>
+                        <div class="candle c2">
+                            <div class="wick"></div>
+                            <div class="flame active"></div>
+                        </div>
+                        <div class="candle c3">
+                            <div class="wick"></div>
+                            <div class="flame active"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 7B: The Final Celebration Board -->
+            <div class="celebration-board hidden" id="celebrationBoard">
+                <h1 class="main-birthday-title glow-text">Happy Birthday, Mayukha! 🎂🎉</h1>
+                <p class="celebration-subtitle">June 20th - Your Special Day ❤️</p>
+
+                <!-- Floating Polaroid Gallery -->
+                <div class="polaroid-gallery">
+                    <!-- Polaroid 1 -->
+                    <div class="polaroid-card item-1">
+                        <div class="photo-container">
+                            <img src="assets/couple-1.png" alt="My favorite smiling queen!" class="svg-photo">
+                        </div>
+                        <p class="polaroid-caption">My favorite smiling queen! 😍</p>
+                    </div>
+
+                    <!-- Polaroid 2 -->
+                    <div class="polaroid-card item-2">
+                        <div class="photo-container">
+                            <img src="assets/couple-2.png" alt="When you got angry!" class="svg-photo">
+                        </div>
+                        <p class="polaroid-caption">When you got angry because I took long to reply! 😜</p>
+                    </div>
+
+                    <!-- Polaroid 3 -->
+                    <div class="polaroid-card item-3">
+                        <div class="photo-container">
+                            <img src="assets/couple-3.png" alt="Forever and always..." class="svg-photo">
+                        </div>
+                        <p class="polaroid-caption">Forever and always... 🔒❤️</p>
+                    </div>
+                </div>
+
+                <!-- Custom instructions for user to swap pictures -->
+                <div class="custom-instructions">
+                    <p class="instructions-text"><i class="fas fa-circle-info"></i> <strong>Note for Boyfriend:</strong> You can replace these cartoon images with your real couple photos inside the `assets/` folder anytime!</p>
+                </div>
+
+                <!-- Scrollable Love Letter Scroll -->
+                <div class="letter-scroll">
+                    <div class="letter-handle handle-top"></div>
+                    <div class="letter-paper">
+                        <h3 class="letter-title">My Dearest Chinnu, 💌</h3>
+                        <p>"I know Dublin feels cold and far away from Kollengode, but whenever you miss me, just look at this screen. I am always just a message away. Close your eyes, think of my silly jokes, and remember that distance means nothing when we are this close in our hearts. I miss you too! ❤️"</p>
+                        <p>Long distance aavan povuah nammal...1st time ah.. enk patila enn ariyam... njn nallonam ninnea miss chyum...timing ellam change aavum... njn ivde eghane survive chyum enn areella enthakilm karym indeal njn nink apo thane msg idunnatha...</p>
+                        <p>ini njn msg chythal epokaanum enn onnum areeella... namuk nokam... avde poyalum namuk strong ayit munnot povanam...kureper avde samsarikanum flirt chyan ellam varum.. nee sredhich nilkttah.. ellarodum oru limit vech nilkttah...</p>
+                        <p>namuk onnamath ariyatha place ah... ivde bus conductor fight indakunna pole avde venda... samadhanathode poyal mathy... neeyum sreya um sredhik... okay chinnuuu .... love you.. take care my girl... And Happy Birthday My Chinnnuu....❤️</p>
+                    </div>
+                    <div class="letter-handle handle-bottom"></div>
+                </div>
+
+                <!-- KOLLENGODE ➔ IRELAND ANIMATION BOARD (Emotional ending) -->
+                <div class="distance-board-wrapper">
+                    <h2 class="distance-title"><i class="fas fa-earth-americas"></i> The Distance Between Us... 🌍✈️</h2>
+                    
+                    <div class="distance-map-area">
+                        <!-- Location Pin Left: Kollengode -->
+                        <div class="map-pin pin-left">
+                            <i class="fas fa-location-dot gps-glow"></i>
+                            <span class="pin-label">Kollengode 🌴</span>
+                        </div>
+                        
+                        <!-- Animated Dotted Line connecting pins -->
+                        <div class="distance-line-container">
+                            <svg viewBox="0 0 100 30" class="distance-svg">
+                                <path id="heart-arc" d="M 10,25 Q 50,0 90,25" fill="none" stroke="rgba(255, 75, 114, 0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                                <path id="pulse-path" d="M 10,25 Q 50,0 90,25" fill="none" stroke="var(--accent-pink)" stroke-width="2" stroke-dasharray="30" stroke-dashoffset="30"/>
+                                <i class="fas fa-plane plane-courier"></i>
+                            </svg>
+                        </div>
+                        
+                        <!-- Location Pin Right: Ireland -->
+                        <div class="map-pin pin-right">
+                            <i class="fas fa-location-dot gps-glow gps-ireland"></i>
+                            <span class="pin-label">Ireland ☘️</span>
+                        </div>
+                    </div>
+
+                    <div class="emotional-message-box">
+                        <p class="text-large text-typing" id="typing-msg-1">"The distance between Kerala and Ireland is thousands of kilometers..."</p>
+                        <p class="text-medium text-typing" id="typing-msg-2">"But every memory, every laugh, and every late-night call keeps you right here in my heart ❤️"</p>
+                        <p class="text-large text-gold text-typing" id="typing-msg-3">"Happy Birthday my love, and good luck on your Irish adventure! ☘️🇮🇪"</p>
+                    </div>
+                </div>
+
+                <!-- Final Hidden Page Trigger Button -->
+                <div class="confidential-trigger-container" style="margin-top: 40px; text-align: center;">
+                    <button class="btn btn-secondary btn-pulse" id="btn-open-report" style="background: linear-gradient(135deg, #ffd700, #ff9f43); color: #110722; font-weight: 800; border: none; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); padding: 15px 30px; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                        <i class="fas fa-lock"></i> 🔒 Confidential Document
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Hidden Page: Official Relationship Report Overlay -->
+        <div class="selfie-overlay" id="reportOverlay">
+            <div class="glass-card report-popup-card" id="reportCard" style="max-width: 500px; width: 90%; border-color: var(--accent-gold); box-shadow: 0 0 35px rgba(255, 215, 0, 0.25); text-align: center; padding: 30px; border-radius: 24px; background: rgba(17, 7, 34, 0.85); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 215, 0, 0.3); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                <div class="selfie-pop-header" style="margin-bottom: 20px;">
+                    <span class="selfie-badge-pop" style="background: rgba(255, 215, 0, 0.15); border-color: var(--accent-gold); color: var(--accent-gold); font-size: 13px; letter-spacing: 1px; padding: 5px 12px; border-radius: 50px; font-weight: 800; border: 1px solid var(--accent-gold);">
+                        📂 CLASSIFIED INFORMATION
+                    </span>
+                </div>
+                
+                <h2 class="glow-text" style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 25px; color: white;">
+                    📄 Official Relationship Report
+                </h2>
+
+                <!-- Report stats list -->
+                <div class="report-stats-container" style="text-align: left; margin-bottom: 25px; font-family: 'Outfit', sans-serif; font-size: 15px;">
+                    <!-- Cute stat -->
+                    <div class="report-stat-row" style="margin-bottom: 15px;">
+                        <div class="stat-info" style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                            <span>Cute Stats</span>
+                            <span style="color: var(--accent-pink);">100/100 ❤️</span>
+                        </div>
+                        <div class="progress-container" style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="progress-bar" style="width: 100%; height: 100%; background: linear-gradient(90deg, #ff4b72, #ff7675); border-radius: 5px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Drama stat -->
+                    <div class="report-stat-row" style="margin-bottom: 15px;">
+                        <div class="stat-info" style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                            <span>Drama Index</span>
+                            <span style="color: #8c7ae6;">98/100 😂</span>
+                        </div>
+                        <div class="progress-container" style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="progress-bar" style="width: 98%; height: 100%; background: linear-gradient(90deg, #8c7ae6, #a55eea); border-radius: 5px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dog Courage stat -->
+                    <div class="report-stat-row" style="margin-bottom: 15px;">
+                        <div class="stat-info" style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                            <span>Dog Courage</span>
+                            <span style="color: #ff7675;">2/100 🐶</span>
+                        </div>
+                        <div class="progress-container" style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="progress-bar" style="width: 2%; height: 100%; background: linear-gradient(90deg, #ff7675, #c23616); border-radius: 5px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Loyalty stat -->
+                    <div class="report-stat-row" style="margin-bottom: 20px;">
+                        <div class="stat-info" style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                            <span>Loyalty Level</span>
+                            <span style="color: var(--accent-gold);">1000/100 ❤️</span>
+                        </div>
+                        <div class="progress-container" style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: 5px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="progress-bar loyalty-overload-bar" style="width: 100%; height: 100%; background: linear-gradient(90deg, #ffd700, #ff9f43); border-radius: 5px; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Distance Survival stat -->
+                    <div class="report-stat-row" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(32, 191, 107, 0.08); padding: 12px 15px; border-radius: 12px; border: 1px dashed rgba(32, 191, 107, 0.3);">
+                        <span style="font-weight: 600; color: #20bf6b;">Distance Survival Prediction:</span>
+                        <span style="background: #20bf6b; color: #110722; font-weight: 800; padding: 4px 10px; border-radius: 6px; font-size: 13px; letter-spacing: 0.5px;">SUCCESS ✅</span>
+                    </div>
+                </div>
+
+                <!-- Report Image Display -->
+                <div class="selfie-img-holder" style="height: 200px; width: 100%; margin-bottom: 15px; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); background: #000; display: flex; justify-content: center; align-items: center;">
+                    <img src="assets/report-photo.png" alt="Official Verdict Image" class="selfie-img" style="object-fit: cover; width: 100%; height: 100%;">
+                </div>
+
+                <!-- Custom instructions for replacing the image -->
+                <div class="custom-instructions" style="margin-bottom: 20px; padding: 8px 12px; width: 100%; box-sizing: border-box; text-align: center;">
+                    <p class="instructions-text" style="font-size: 11px; margin: 0; line-height: 1.4;"><i class="fas fa-circle-info"></i> <strong>Note for Boyfriend:</strong> You can replace `report-photo.png` in the `assets/` folder with your special picture later!</p>
+                </div>
+
+                <!-- Final Verdict -->
+                <div class="officer-bubble-popup w-100" style="margin-bottom: 25px; border-color: var(--accent-gold); background: rgba(255, 215, 0, 0.03); padding: 20px; box-sizing: border-box; border-radius: 16px;">
+                    <h3 style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--accent-gold); letter-spacing: 1.5px; margin-top: 0; margin-bottom: 12px;">Final Verdict</h3>
+                    <p class="verdict-text" style="font-size: 17px; font-weight: 600; line-height: 1.5; margin: 5px 0; color: white; font-style: italic;">
+                        "Ireland may take you away..."
+                    </p>
+                    <p class="verdict-text" style="font-size: 17px; font-weight: 600; line-height: 1.5; margin: 5px 0; color: var(--accent-pink); font-style: italic;">
+                        "But you're still my favorite notification ❤️📱"
+                    </p>
+                </div>
+
+                <button class="btn btn-primary" id="btn-report-close" style="width: 100%;">Close Document 🔒</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sound Effects Preloads -->
+    <audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav" preload="auto"></audio>
+    <audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/911/911-84.wav" preload="auto"></audio>
+    <audio id="sfx-pop" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
+    <audio id="sfx-cheer" src="https://assets.mixkit.co/active_storage/sfx/1993/1993-84.wav" preload="auto"></audio>
+    <audio id="sfx-wheel" src="https://assets.mixkit.co/active_storage/sfx/2005/2005-84.wav" preload="auto"></audio>
+    <audio id="sfx-growl" src="https://assets.mixkit.co/active_storage/sfx/1131/1131-84.wav" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
