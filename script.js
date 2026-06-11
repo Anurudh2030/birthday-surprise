@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BACKGROUND HEARTS SPARKLE ---
     const heartsContainer = document.getElementById('heartsContainer');
-    const heartEmojis = ['❤️', '💖', '💘', '💝', '🌸', '✨', '🦇', 'batman'];
+    const heartEmojis = ['❤️', '💖', '💘', '💝', '🌸', '✨', '🦇', 'batman', 'ironman', 'superman', 'hulk', 'thor', 'blackpanther', 'spiderman'];
 
     function createHeart() {
         const heart = document.createElement('div');
@@ -62,6 +62,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const chosen = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
         if (chosen === 'batman') {
             heart.innerHTML = `<img src="assets/batman-logo.png" style="width: 24px; height: 24px; border-radius: 50%; display: block; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5)); opacity: 0.75;">`;
+        } else if (chosen === 'ironman') {
+            heart.innerText = '🦾🤖';
+            heart.style.textShadow = '0 0 10px #ff3f34, 0 0 20px #ffd700';
+        } else if (chosen === 'superman') {
+            heart.innerText = '🦸‍♂️';
+            heart.style.textShadow = '0 0 10px #0652dd, 0 0 20px #ea2027';
+        } else if (chosen === 'hulk') {
+            heart.innerText = '🟢🦖';
+            heart.style.textShadow = '0 0 10px #4cd137, 0 0 20px #4cd137';
+        } else if (chosen === 'thor') {
+            heart.innerText = '🔨⚡';
+            heart.style.textShadow = '0 0 10px #00a8ff, 0 0 20px #ffffff';
+        } else if (chosen === 'blackpanther') {
+            heart.innerText = '🐈‍⬛🐾';
+            heart.style.textShadow = '0 0 10px #9c88ff, 0 0 20px #8c7ae6';
+        } else if (chosen === 'spiderman') {
+            heart.innerText = '🕷️🕸️';
+            heart.style.textShadow = '0 0 10px #ff7675, 0 0 20px #0984e3';
         } else {
             heart.innerText = chosen;
         }
