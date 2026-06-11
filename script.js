@@ -395,66 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const progressPercentage = ((currentQuestionIndex) / quizData.length) * 100;
         quizProgress.style.width = `${progressPercentage}%`;
 
-        // Stop any currently playing singing audios from previous loaded questions
-        const oldSingingAudio = document.getElementById('singingAudio');
-        if (oldSingingAudio) {
-            oldSingingAudio.pause();
-        }
-
         // Load Question Text
         questionBox.innerHTML = `<h2 class="question-text">${currentData.question}</h2>`;
-
-        // If it is a singing question, render the audio player card
-        if (currentData.isSingingQuestion) {
-            const playerDiv = document.createElement('div');
-            playerDiv.className = 'singing-player-wrapper';
-            playerDiv.innerHTML = `
-                <div class="audio-player-card" style="margin: 20px auto; padding: 15px; background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 75, 114, 0.3); border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 15px; max-width: 300px; box-sizing: border-box;">
-                    <audio id="singingAudio" src="assets/singing.mp3"></audio>
-                    <button id="btn-play-singing" style="background: var(--accent-pink); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 4px 10px rgba(255, 75, 114, 0.3); transition: transform 0.2s ease, background-color 0.2s ease;">
-                        <i class="fas fa-play" id="play-singing-icon"></i>
-                    </button>
-                    <div style="text-align: left; flex: 1;">
-                        <span style="font-size: 13.5px; font-weight: 700; color: white; display: block;">Chinnu's Voice Note 🎵</span>
-                        <span style="font-size: 11px; color: var(--text-muted);">Listen to the evidence...</span>
-                    </div>
-                </div>
-            `;
-            questionBox.appendChild(playerDiv);
-            
-            // Wire up play/pause logic
-            const singingAudio = playerDiv.querySelector('#singingAudio');
-            const btnPlaySinging = playerDiv.querySelector('#btn-play-singing');
-            const playSingingIcon = playerDiv.querySelector('#play-singing-icon');
-            
-            if (btnPlaySinging && singingAudio) {
-                btnPlaySinging.addEventListener('click', () => {
-                    // Pause background lofi music if playing, so they don't overlap!
-                    if (bgMusic && !bgMusic.paused) {
-                        bgMusic.pause();
-                        if (musicToggle) musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-                        if (musicBars) musicBars.classList.remove('playing');
-                    }
-                    
-                    if (singingAudio.paused) {
-                        singingAudio.play().then(() => {
-                            playSingingIcon.className = 'fas fa-pause';
-                            btnPlaySinging.style.background = '#8c7ae6'; // change color to purple when playing
-                        }).catch(err => console.log('Audio playback blocked: ', err));
-                    } else {
-                        singingAudio.pause();
-                        playSingingIcon.className = 'fas fa-play';
-                        btnPlaySinging.style.background = 'var(--accent-pink)';
-                    }
-                });
-                
-                // Reset icon on audio ended
-                singingAudio.addEventListener('ended', () => {
-                    playSingingIcon.className = 'fas fa-play';
-                    btnPlaySinging.style.background = 'var(--accent-pink)';
-                });
-            }
-        }
 
         // Clear Options
         optionsContainer.innerHTML = '';
@@ -736,6 +678,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentData.isHungerQuestion && hungryImgHolder) {
                     hungryImgHolder.style.display = 'block';
                 }
+
+                // If it is the singing question and correct, play singing audio in the popup!
+                if (currentData.isSingingQuestion) {
+                    // Pause lofi background music if playing
+                    if (bgMusic && !bgMusic.paused) {
+                        bgMusic.pause();
+                        if (musicToggle) musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                        if (musicBars) musicBars.classList.remove('playing');
+                    }
+                    
+                    // Create and append the popup audio player card
+                    let singingPlayer = document.getElementById('popupSingingPlayer');
+                    if (!singingPlayer) {
+                        singingPlayer = document.createElement('div');
+                        singingPlayer.id = 'popupSingingPlayer';
+                        singingPlayer.style.width = '100%';
+                        singingPlayer.style.marginBottom = '20px';
+                        
+                        // Insert it before the action button in the card
+                        btnQuizAction.parentNode.insertBefore(singingPlayer, btnQuizAction);
+                    }
+                    
+                    singingPlayer.innerHTML = `
+                        <div class="audio-player-card" style="margin: 10px auto; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 75, 114, 0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 15px; max-width: 280px; box-sizing: border-box;">
+                            <audio id="popupSingingAudio" src="assets/singing.mp3" autoplay></audio>
+                            <button id="btn-popup-play" style="background: #8c7ae6; border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; box-shadow: 0 4px 10px rgba(140, 122, 230, 0.3); transition: transform 0.2s ease, background-color 0.2s ease;">
+                                <i class="fas fa-pause" id="popup-play-icon"></i>
+                            </button>
+                            <div style="text-align: left; flex: 1;">
+                                <span style="font-size: 13px; font-weight: 700; color: white; display: block;">Chinnu's Voice Note 🎵</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">Playing evidence...</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const popupAudio = singingPlayer.querySelector('#popupSingingAudio');
+                    const btnPopupPlay = singingPlayer.querySelector('#btn-popup-play');
+                    const popupPlayIcon = singingPlayer.querySelector('#popup-play-icon');
+                    
+                    if (btnPopupPlay && popupAudio) {
+                        btnPopupPlay.addEventListener('click', () => {
+                            if (popupAudio.paused) {
+                                popupAudio.play().then(() => {
+                                    popupPlayIcon.className = 'fas fa-pause';
+                                    btnPopupPlay.style.background = '#8c7ae6';
+                                });
+                            } else {
+                                popupAudio.pause();
+                                popupPlayIcon.className = 'fas fa-play';
+                                btnPopupPlay.style.background = 'var(--accent-pink)';
+                            }
+                        });
+                        
+                        popupAudio.addEventListener('ended', () => {
+                            popupPlayIcon.className = 'fas fa-play';
+                            btnPopupPlay.style.background = 'var(--accent-pink)';
+                        });
+                    }
+                }
             } else {
                 // Incorrect choice
                 playSFX(sfxWrong);
@@ -902,6 +903,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-quiz-action').addEventListener('click', (e) => {
         const quizOverlay = document.getElementById('quizOverlay');
         const action = e.currentTarget.getAttribute('data-action');
+
+        // Stop and remove the popup singing player if it exists
+        const popupAudio = document.getElementById('popupSingingAudio');
+        if (popupAudio) {
+            popupAudio.pause();
+        }
+        const singingPlayer = document.getElementById('popupSingingPlayer');
+        if (singingPlayer) {
+            singingPlayer.remove();
+        }
+
         quizOverlay.classList.remove('active');
         playSFX(sfxPop);
  
