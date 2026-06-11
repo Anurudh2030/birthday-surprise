@@ -53,12 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BACKGROUND HEARTS SPARKLE ---
     const heartsContainer = document.getElementById('heartsContainer');
-    const heartEmojis = ['❤️', '💖', '💘', '💝', '🌸', '✨'];
+    const heartEmojis = ['❤️', '💖', '💘', '💝', '🌸', '✨', '🦇', 'batman'];
 
     function createHeart() {
         const heart = document.createElement('div');
         heart.classList.add('floating-heart');
-        heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        
+        const chosen = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        if (chosen === 'batman') {
+            heart.innerHTML = `<img src="assets/batman-logo.png" style="width: 24px; height: 24px; border-radius: 50%; display: block; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5)); opacity: 0.75;">`;
+        } else {
+            heart.innerText = chosen;
+        }
         
         // Random placement and sizes
         heart.style.left = Math.random() * 100 + 'vw';
