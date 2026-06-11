@@ -355,13 +355,13 @@ document.addEventListener('DOMContentLoaded', () => {
             correctFeedback: {
                 badge: "🎵 Melodious Queen! 👑",
                 speech: "Obviously Mayukha! 🥰✨",
-                subSpeech: "Aa audio kelക്കുമ്പോൾ തന്നെ അറിയാം ആരുടേതാണ് ആ മനോഹരമായ ശബ്ദം എന്ന്! ❤️",
+                subSpeech: "Here is the evidence... 🎧❤️",
                 buttonText: "Proceed ➡️"
             },
             incorrectFeedback: {
                 badge: "🚨 Wrong Answer! 🚨",
                 speech: "Hehe... aara ee parayunnath? 😜",
-                subSpeech: "Aa sound kelക്കുമ്പോൾ തന്നെ അറിയാം അത് ചിന്നു പാടിയതാണെന്ന്! Veendum try cheyyu Chinnuu 😂❤️",
+                subSpeech: "onnoode try chyuu...CORRECT AYI CLICK CHYTHAL ORU SURPRISE IND...",
                 buttonText: "Veendum try cheyyu. 🔄"
             }
         }
