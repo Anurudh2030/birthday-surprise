@@ -346,8 +346,11 @@ document.addEventListener('DOMContentLoaded', () => {
             isCustomOverlayQuestion: true,
             isSingingQuestion: true,
             options: [
-                { text: "1️⃣ ANURUDH 🤵", correct: false },
-                { text: "2️⃣ MAYUKHA 👸", correct: true }
+                { text: "1️⃣ Arijit Singh 🎤", correct: false },
+                { text: "2️⃣ Anirudh Ravichander 🎵", correct: false },
+                { text: "3️⃣ Shreya Ghoshal 👩‍🎤", correct: false },
+                { text: "4️⃣ MAYUKHA 👸", correct: true },
+                { text: "5️⃣ Vineeth Sreenivasan 🎸", correct: false }
             ],
             correctFeedback: {
                 badge: "🎵 Melodious Queen! 👑",
@@ -357,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             incorrectFeedback: {
                 badge: "🚨 Wrong Answer! 🚨",
-                speech: "Ayyada... swantham aayi pukazhthan nokkiyo? 😜",
+                speech: "Hehe... aara ee parayunnath? 😜",
                 subSpeech: "Aa sound kelക്കുമ്പോൾ തന്നെ അറിയാം അത് ചിന്നു പാടിയതാണെന്ന്! Veendum try cheyyu Chinnuu 😂❤️",
                 buttonText: "Veendum try cheyyu. 🔄"
             }
