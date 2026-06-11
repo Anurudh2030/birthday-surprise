@@ -340,6 +340,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 subSpeech: "Njan safe aayi rescue cheyyunnath vare wait cheyyillalloo, athinu munne odille? 😜❤️",
                 buttonText: "Veendum try cheyyu. 🔄"
             }
+        },
+        {
+            question: "🎤 നമ്മളിൽ ആരാണ് കൂടുതൽ നന്നായി പാടുന്നത്? 🎶<br><span style='font-size: 13px; color: var(--text-muted); font-weight: normal;'>(Click the play button to hear the evidence!)</span>",
+            isCustomOverlayQuestion: true,
+            isSingingQuestion: true,
+            options: [
+                { text: "1️⃣ ANURUDH 🤵", correct: false },
+                { text: "2️⃣ MAYUKHA 👸", correct: true }
+            ],
+            correctFeedback: {
+                badge: "🎵 Melodious Queen! 👑",
+                speech: "Obviously Mayukha! 🥰✨",
+                subSpeech: "Aa audio kelക്കുമ്പോൾ തന്നെ അറിയാം ആരുടേതാണ് ആ മനോഹരമായ ശബ്ദം എന്ന്! ❤️",
+                buttonText: "Proceed ➡️"
+            },
+            incorrectFeedback: {
+                badge: "🚨 Wrong Answer! 🚨",
+                speech: "Ayyada... swantham aayi pukazhthan nokkiyo? 😜",
+                subSpeech: "Aa sound kelക്കുമ്പോൾ തന്നെ അറിയാം അത് ചിന്നു പാടിയതാണെന്ന്! Veendum try cheyyu Chinnuu 😂❤️",
+                buttonText: "Veendum try cheyyu. 🔄"
+            }
         }
     ];
 
@@ -374,8 +395,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const progressPercentage = ((currentQuestionIndex) / quizData.length) * 100;
         quizProgress.style.width = `${progressPercentage}%`;
 
+        // Stop any currently playing singing audios from previous loaded questions
+        const oldSingingAudio = document.getElementById('singingAudio');
+        if (oldSingingAudio) {
+            oldSingingAudio.pause();
+        }
+
         // Load Question Text
         questionBox.innerHTML = `<h2 class="question-text">${currentData.question}</h2>`;
+
+        // If it is a singing question, render the audio player card
+        if (currentData.isSingingQuestion) {
+            const playerDiv = document.createElement('div');
+            playerDiv.className = 'singing-player-wrapper';
+            playerDiv.innerHTML = `
+                <div class="audio-player-card" style="margin: 20px auto; padding: 15px; background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 75, 114, 0.3); border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 15px; max-width: 300px; box-sizing: border-box;">
+                    <audio id="singingAudio" src="assets/singing.mp3"></audio>
+                    <button id="btn-play-singing" style="background: var(--accent-pink); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 4px 10px rgba(255, 75, 114, 0.3); transition: transform 0.2s ease, background-color 0.2s ease;">
+                        <i class="fas fa-play" id="play-singing-icon"></i>
+                    </button>
+                    <div style="text-align: left; flex: 1;">
+                        <span style="font-size: 13.5px; font-weight: 700; color: white; display: block;">Chinnu's Voice Note 🎵</span>
+                        <span style="font-size: 11px; color: var(--text-muted);">Listen to the evidence...</span>
+                    </div>
+                </div>
+            `;
+            questionBox.appendChild(playerDiv);
+            
+            // Wire up play/pause logic
+            const singingAudio = playerDiv.querySelector('#singingAudio');
+            const btnPlaySinging = playerDiv.querySelector('#btn-play-singing');
+            const playSingingIcon = playerDiv.querySelector('#play-singing-icon');
+            
+            if (btnPlaySinging && singingAudio) {
+                btnPlaySinging.addEventListener('click', () => {
+                    // Pause background lofi music if playing, so they don't overlap!
+                    if (bgMusic && !bgMusic.paused) {
+                        bgMusic.pause();
+                        if (musicToggle) musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                        if (musicBars) musicBars.classList.remove('playing');
+                    }
+                    
+                    if (singingAudio.paused) {
+                        singingAudio.play().then(() => {
+                            playSingingIcon.className = 'fas fa-pause';
+                            btnPlaySinging.style.background = '#8c7ae6'; // change color to purple when playing
+                        }).catch(err => console.log('Audio playback blocked: ', err));
+                    } else {
+                        singingAudio.pause();
+                        playSingingIcon.className = 'fas fa-play';
+                        btnPlaySinging.style.background = 'var(--accent-pink)';
+                    }
+                });
+                
+                // Reset icon on audio ended
+                singingAudio.addEventListener('ended', () => {
+                    playSingingIcon.className = 'fas fa-play';
+                    btnPlaySinging.style.background = 'var(--accent-pink)';
+                });
+            }
+        }
 
         // Clear Options
         optionsContainer.innerHTML = '';
