@@ -1492,6 +1492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // STAGE 7: THE GRAND REVEAL & INTERACTIVE CAKE
     // ==============================================
     const bgMusic = document.getElementById('bgMusic');
+    const singingMusic = document.getElementById('singingMusic');
     const musicWidget = document.getElementById('musicWidget');
     const musicToggle = document.getElementById('musicToggle');
     const musicBars = document.querySelector('.music-bars');
@@ -1517,8 +1518,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         playSFX(sfxCheer);
         
-        // Start background music
+        // Start background music and singing voice note simultaneously
+        bgMusic.volume = 0.25;
+        if (singingMusic) {
+            singingMusic.volume = 1.0;
+        }
+
         bgMusic.play().then(() => {
+            if (singingMusic) {
+                singingMusic.play().catch(err => console.log("Singing music auto-play blocked: ", err));
+            }
+            if (musicToggle) {
+                musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+            }
             musicWidget.style.display = 'flex';
             musicBars.classList.add('playing');
         }).catch(err => {
@@ -1543,10 +1555,16 @@ document.addEventListener('DOMContentLoaded', () => {
     musicToggle.addEventListener('click', () => {
         if (bgMusic.paused) {
             bgMusic.play();
+            if (singingMusic) {
+                singingMusic.play().catch(err => console.log("Singing music play failed: ", err));
+            }
             musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
             musicBars.classList.add('playing');
         } else {
             bgMusic.pause();
+            if (singingMusic) {
+                singingMusic.pause();
+            }
             musicToggle.innerHTML = '<i class="fas fa-music"></i>';
             musicBars.classList.remove('playing');
         }
@@ -1587,6 +1605,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (bgMusic) {
                 bgMusic.pause();
                 bgMusic.currentTime = 0;
+            }
+            if (singingMusic) {
+                singingMusic.pause();
+                singingMusic.currentTime = 0;
+            }
+            if (musicToggle) {
+                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
             }
             if (musicWidget) {
                 musicWidget.style.display = 'none';
