@@ -1524,10 +1524,14 @@ document.addEventListener('DOMContentLoaded', () => {
             singingMusic.volume = 1.0;
         }
 
-        bgMusic.play().then(() => {
-            if (singingMusic) {
-                singingMusic.play().catch(err => console.log("Singing music auto-play blocked: ", err));
-            }
+        // Play both synchronously inside the user gesture stack to prevent browser autoplay block
+        const playBg = bgMusic.play();
+        let playSinging = null;
+        if (singingMusic) {
+            playSinging = singingMusic.play();
+        }
+
+        playBg.then(() => {
             if (musicToggle) {
                 musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
             }
@@ -1537,6 +1541,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Music auto-play blocked, showing play controls: ", err);
             musicWidget.style.display = 'flex'; // show play button anyway
         });
+
+        if (playSinging) {
+            playSinging.catch(err => {
+                console.log("Singing music auto-play blocked: ", err);
+            });
+        }
 
         // Trigger heavy confetti shower
         startConfettiShower();
