@@ -1746,6 +1746,17 @@ body {
 #typing-msg-2 { animation-delay: 3s; }
 #typing-msg-3 { animation-delay: 5s; }
 
+@keyframes slideInText {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .text-medium {
     font-weight: 500;
     color: var(--text-muted);
