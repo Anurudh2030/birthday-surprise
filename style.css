@@ -1496,6 +1496,8 @@ body {
 .polaroid-card.item-1 { transform: rotate(-5deg); }
 .polaroid-card.item-2 { transform: rotate(3deg); }
 .polaroid-card.item-3 { transform: rotate(-3deg); }
+.polaroid-card.item-4 { transform: rotate(4deg); }
+.polaroid-card.item-5 { transform: rotate(-4deg); }
 
 .photo-container {
     width: 172px;
