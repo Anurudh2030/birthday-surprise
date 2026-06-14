@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sfxCheer = document.getElementById('sfx-cheer');
     const sfxWheel = document.getElementById('sfx-wheel');
     const sfxGrowl = document.getElementById('sfx-growl');
+    const sfxBark = document.getElementById('sfx-bark');
     
     // Safety check for audio playing
     function playSFX(audioElement) {
@@ -1131,8 +1132,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnDogsContinue = document.getElementById('btn-dogs-continue');
 
     btnSaveDogs.addEventListener('click', () => {
-        // Play scary growl sound
+        // Play scary growl sound and dog barking sounds
         playSFX(sfxGrowl);
+        playSFX(sfxBark);
+        
+        // Play additional barks as the swarm continues
+        setTimeout(() => playSFX(sfxBark), 600);
+        setTimeout(() => playSFX(sfxBark), 1200);
         
         // Swarm screen with barking dogs
         dogsSwarmOverlay.style.display = 'flex';
