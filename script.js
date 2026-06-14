@@ -444,12 +444,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Trigger repeating dog bark if it's the dog question (Index 7)
         if (currentQuestionIndex === 7) {
-            // Play first bark with a small delay so it doesn't overlap transition pop
-            setTimeout(() => {
-                if (currentQuestionIndex === 7 && stages.quiz.classList.contains('active')) {
-                    playSFX(sfxBark);
-                }
-            }, 600);
+            // Play first bark immediately
+            if (stages.quiz.classList.contains('active')) {
+                playSFX(sfxBark);
+            }
             
             dogBarkInterval = setInterval(() => {
                 if (currentQuestionIndex === 7 && stages.quiz.classList.contains('active')) {
@@ -458,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(dogBarkInterval);
                     dogBarkInterval = null;
                 }
-            }, 1800);
+            }, 1000);
         }
     }
 
