@@ -1600,6 +1600,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnOpenReport.addEventListener('click', () => {
             playSFX(sfxPop);
             reportOverlay.classList.add('active');
+            reportOverlay.scrollTop = 0; // Force scroll to the top of the report
             
             // Special heavy shower of hearts when opening the secret report
             for (let i = 0; i < 20; i++) {

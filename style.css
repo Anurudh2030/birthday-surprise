@@ -1890,8 +1890,8 @@ body {
     z-index: 215;
     display: none;
     justify-content: center;
-    align-items: center;
-    padding: 20px;
+    align-items: flex-start; /* Fix flexbox centering scroll bug */
+    padding: 40px 20px;
     backdrop-filter: blur(12px);
     overflow-y: auto;
 }
