@@ -2209,3 +2209,7 @@ body {
     object-fit: cover;
     border-radius: 50%;
 }
+
+#reportCard:focus {
+    outline: none;
+}

@@ -1600,7 +1600,22 @@ document.addEventListener('DOMContentLoaded', () => {
         btnOpenReport.addEventListener('click', () => {
             playSFX(sfxPop);
             reportOverlay.classList.add('active');
-            reportOverlay.scrollTop = 0; // Force scroll to the top of the report
+            
+            // Blur active element to prevent browser auto-focus scrolling to the bottom close button
+            if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                document.activeElement.blur();
+            }
+
+            const reportCard = document.getElementById('reportCard');
+            if (reportCard) {
+                reportCard.focus();
+            }
+
+            // Force scroll both containers to top
+            reportOverlay.scrollTop = 0;
+            if (reportCard) {
+                reportCard.scrollTop = 0;
+            }
             
             // Special heavy shower of hearts when opening the secret report
             for (let i = 0; i < 20; i++) {
