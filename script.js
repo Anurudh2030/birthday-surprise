@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             question: "⏰ Dating അല്ലെങ്കിൽ പുറത്ത് കറങ്ങാൻ പോകുമ്പോൾ എപ്പോഴും Late ആകുന്നത് ആരാ? 🤷‍♂️🤷‍♀️",
             isCustomOverlayQuestion: true,
+            isLateQuestion: true,
             options: [
                 { text: "1️⃣ ANURUDH 🤵", correct: false },
                 { text: "2️⃣ MAYUKHA 👸", correct: true }
@@ -652,10 +653,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnQuizAction = document.getElementById('btn-quiz-action');
             const quizCard = document.getElementById('quizCard');
             const hungryImgHolder = document.getElementById('hungryImgHolder');
+            const lateImgHolder = document.getElementById('lateImgHolder');
 
             // Hide initially
             if (hungryImgHolder) {
                 hungryImgHolder.style.display = 'none';
+            }
+            if (lateImgHolder) {
+                lateImgHolder.style.display = 'none';
             }
 
             quizCard.classList.remove('error-shake');
@@ -680,6 +685,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Show hungry chinnu image if correct and hunger question
                 if (currentData.isHungerQuestion && hungryImgHolder) {
                     hungryImgHolder.style.display = 'block';
+                }
+
+                // Show late chinnu image if correct and late question
+                if (currentData.isLateQuestion && lateImgHolder) {
+                    lateImgHolder.style.display = 'block';
                 }
 
                 // If it is the singing question and correct, play singing audio in the popup!
