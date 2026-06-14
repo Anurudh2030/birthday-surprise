@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sfxWheel = document.getElementById('sfx-wheel');
     const sfxGrowl = document.getElementById('sfx-growl');
     const sfxBark = document.getElementById('sfx-bark');
+    let dogBarkInterval = null;
     
     // Safety check for audio playing
     function playSFX(audioElement) {
@@ -34,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function showStage(stageName) {
+        if (stageName !== 'quiz' && dogBarkInterval) {
+            clearInterval(dogBarkInterval);
+            dogBarkInterval = null;
+        }
+
         Object.values(stages).forEach(stage => stage.classList.remove('active'));
         stages[stageName].classList.add('active');
         playSFX(sfxPop);
@@ -384,6 +390,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadQuestion() {
+        // Stop any active dog barking loop
+        if (dogBarkInterval) {
+            clearInterval(dogBarkInterval);
+            dogBarkInterval = null;
+        }
+
         // Clean up any stray dodging buttons appended to document.body
         const strayButtons = document.querySelectorAll('body > .option-btn.is-dodging');
         strayButtons.forEach(btn => btn.remove());
@@ -429,6 +441,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             optionsContainer.appendChild(button);
         });
+
+        // Trigger repeating dog bark if it's the dog question (Index 7)
+        if (currentQuestionIndex === 7) {
+            // Play first bark with a small delay so it doesn't overlap transition pop
+            setTimeout(() => {
+                if (currentQuestionIndex === 7 && stages.quiz.classList.contains('active')) {
+                    playSFX(sfxBark);
+                }
+            }, 600);
+            
+            dogBarkInterval = setInterval(() => {
+                if (currentQuestionIndex === 7 && stages.quiz.classList.contains('active')) {
+                    playSFX(sfxBark);
+                } else {
+                    clearInterval(dogBarkInterval);
+                    dogBarkInterval = null;
+                }
+            }, 1800);
+        }
     }
 
     function getDistanceToRect(x, y, rect) {
